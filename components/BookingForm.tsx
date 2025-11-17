@@ -10,18 +10,30 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { bookingSchema, type BookingFormData } from "@/lib/validations";
 import { submitBooking } from "@/app/actions/booking";
-import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { CheckCircle2, Loader2, AlertCircle, CreditCard } from "lucide-react";
 
 interface BookingFormProps {
   packageId: string;
   packageTitle: string;
+  packagePrice?: number;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function BookingForm({ packageId, packageTitle, open, onOpenChange }: BookingFormProps) {
+export function BookingForm({
+  packageId,
+  packageTitle,
+  packagePrice,
+  open,
+  onOpenChange,
+}: BookingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
+  const [submitStatus, setSubmitStatus] = useState<{
+    success: boolean;
+    message: string;
+    bookingId?: string;
+    packageId?: string;
+  } | null>(null);
 
   const {
     register,
@@ -50,12 +62,33 @@ export function BookingForm({ packageId, packageTitle, open, onOpenChange }: Boo
       const result = await submitBooking(formData);
       setSubmitStatus(result);
 
-      if (result.success) {
-        reset();
-        setTimeout(() => {
-          onOpenChange(false);
-          setSubmitStatus(null);
-        }, 2000);
+      if (result.success && result.bookingId) {
+        // Redirect to Stripe checkout
+        try {
+          const response = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              packageId: result.packageId || packageId,
+              bookingId: result.bookingId,
+            }),
+          });
+
+          const checkoutData = await response.json();
+
+          if (checkoutData.url) {
+            // Redirect to Stripe Checkout
+            window.location.href = checkoutData.url;
+          } else {
+            throw new Error("No checkout URL received");
+          }
+        } catch (error) {
+          console.error("Checkout error:", error);
+          setSubmitStatus({
+            success: false,
+            message: "Failed to initiate payment. Please try again.",
+          });
+        }
       }
     } catch (error) {
       setSubmitStatus({
@@ -73,7 +106,16 @@ export function BookingForm({ packageId, packageTitle, open, onOpenChange }: Boo
         <DialogHeader>
           <DialogTitle>Book {packageTitle}</DialogTitle>
           <DialogDescription>
-            Fill out the form below and we'll get back to you shortly to confirm your booking.
+            {packagePrice ? (
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-2xl font-bold text-primary">
+                  ${packagePrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+                <span className="text-muted-foreground">will be charged after booking</span>
+              </div>
+            ) : (
+              "Fill out the form below and proceed to secure payment."
+            )}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -123,9 +165,18 @@ export function BookingForm({ packageId, packageTitle, open, onOpenChange }: Boo
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Submit Booking
+            <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Proceed to Payment
+                </>
+              )}
             </Button>
           </div>
         </form>

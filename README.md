@@ -239,6 +239,73 @@ The app includes a flexible `Logo` component with multiple options:
 
 The logo automatically appears in the Header and Footer. All branding uses environment variables for easy customization.
 
+## 💳 Stripe Payment Integration
+
+The app includes full Stripe payment integration for processing bookings. Here's how to set it up:
+
+### Setup Instructions
+
+1. **Create a Stripe Account**
+   - Sign up at [stripe.com](https://stripe.com)
+   - Get your API keys from the [Stripe Dashboard](https://dashboard.stripe.com/apikeys)
+
+2. **Add Stripe Keys to `.env`**
+   ```env
+   STRIPE_SECRET_KEY="sk_test_your_stripe_secret_key_here"
+   STRIPE_WEBHOOK_SECRET="whsec_your_webhook_secret_here"
+   NEXT_PUBLIC_APP_URL="http://localhost:3000"
+   ```
+
+3. **Set up Stripe Webhooks** (for production)
+   - Go to [Stripe Dashboard → Webhooks](https://dashboard.stripe.com/webhooks)
+   - Click "Add endpoint"
+   - Endpoint URL: `https://yourdomain.com/api/webhooks/stripe`
+   - Select events to listen for:
+     - `checkout.session.completed`
+     - `payment_intent.payment_failed`
+     - `charge.refunded`
+   - Copy the webhook signing secret to `STRIPE_WEBHOOK_SECRET`
+
+4. **For Local Development** (using Stripe CLI)
+   ```bash
+   # Install Stripe CLI
+   brew install stripe/stripe-cli/stripe
+   
+   # Login to Stripe
+   stripe login
+   
+   # Forward webhooks to local server
+   stripe listen --forward-to localhost:3000/api/webhooks/stripe
+   
+   # Copy the webhook secret from the output to STRIPE_WEBHOOK_SECRET
+   ```
+
+### Payment Flow
+
+1. **User Books Package** → Booking form creates a booking with `paymentStatus: "pending"`
+2. **Redirect to Stripe Checkout** → User is redirected to Stripe's secure payment page
+3. **Payment Processing** → Stripe handles card payment securely
+4. **Webhook Updates** → Stripe webhook updates booking `paymentStatus: "paid"` on success
+5. **Success/Cancel Pages** → User redirected to success or cancel page based on outcome
+
+### Testing Payments
+
+Use Stripe test cards:
+- **Success**: `4242 4242 4242 4242`
+- **Decline**: `4000 0000 0000 0002`
+- **3D Secure**: `4000 0025 0000 3155`
+- Use any future expiry date, any 3-digit CVC, any ZIP
+
+### Payment Status Tracking
+
+Bookings track payment status:
+- `pending` - Booking created, payment not started
+- `paid` - Payment successful
+- `failed` - Payment failed
+- `refunded` - Payment refunded
+
+You can query bookings by payment status in your admin panel or API.
+
 ## 📧 Email Integration (TODO)
 
 Currently, the app logs emails to the console as stubs. To add real email functionality:
@@ -272,6 +339,9 @@ git push -u origin main
 3. **Configure Environment Variables**
    In Vercel dashboard, add:
    - `DATABASE_URL`
+   - `STRIPE_SECRET_KEY` (use production key: `sk_live_...`)
+   - `STRIPE_WEBHOOK_SECRET` (from Stripe Dashboard webhook settings)
+   - `NEXT_PUBLIC_APP_URL` (your production URL: `https://yourdomain.com`)
    - `NEXT_PUBLIC_SITE_NAME`
    - `NEXT_PUBLIC_PRIMARY`
    - `NEXT_PUBLIC_ACCENT`
@@ -298,6 +368,16 @@ If needed, add to `vercel.json`:
 }
 ```
 
+## 💰 Dynamic Features
+
+The app now includes dynamic payment processing:
+
+- ✅ **Stripe Integration** - Secure payment processing
+- ✅ **Real-time Payment Status** - Track bookings with payment status
+- ✅ **Checkout Flow** - Seamless redirect to Stripe Checkout
+- ✅ **Webhook Support** - Automatic payment status updates
+- ✅ **Success/Cancel Pages** - Clear user feedback after payment
+
 ## 📝 TODO / Notes
 
 - [ ] Replace placeholder images with actual travel photos
@@ -308,6 +388,7 @@ If needed, add to `vercel.json`:
 - [ ] Add image upload functionality
 - [ ] Add analytics tracking
 - [ ] Optimize images with Next.js Image component (already using, but add more sizes)
+- [ ] Add admin dashboard for viewing bookings and payments
 
 ## 🐛 Troubleshooting
 

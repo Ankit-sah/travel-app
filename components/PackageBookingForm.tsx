@@ -7,9 +7,14 @@ import { Button } from "./ui/button";
 interface PackageBookingFormProps {
   packageId: string;
   packageTitle: string;
+  packagePrice?: number;
 }
 
-export function PackageBookingForm({ packageId, packageTitle }: PackageBookingFormProps) {
+export function PackageBookingForm({
+  packageId,
+  packageTitle,
+  packagePrice,
+}: PackageBookingFormProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -20,6 +25,7 @@ export function PackageBookingForm({ packageId, packageTitle }: PackageBookingFo
       <BookingForm
         packageId={packageId}
         packageTitle={packageTitle}
+        packagePrice={packagePrice}
         open={isOpen}
         onOpenChange={setIsOpen}
       />

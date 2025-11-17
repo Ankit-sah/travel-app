@@ -16,9 +16,26 @@ export async function submitBooking(formData: FormData) {
 
     const validatedData = bookingSchema.parse(data);
 
-    // Save to database
+    // Get package price
+    const packageData = await prisma.package.findUnique({
+      where: { id: validatedData.packageId },
+      select: { price: true, title: true },
+    });
+
+    if (!packageData) {
+      return {
+        success: false,
+        message: "Package not found.",
+      };
+    }
+
+    // Save to database with payment status pending
     const booking = await prisma.booking.create({
-      data: validatedData,
+      data: {
+        ...validatedData,
+        amount: packageData.price,
+        paymentStatus: "pending",
+      },
       include: {
         package: {
           select: {
@@ -58,7 +75,9 @@ export async function submitBooking(formData: FormData) {
 
     return {
       success: true,
-      message: "Booking request submitted successfully! We'll contact you soon.",
+      message: "Booking created successfully! Redirecting to payment...",
+      bookingId: booking.id,
+      packageId: validatedData.packageId,
     };
   } catch (error) {
     console.error("Booking error:", error);

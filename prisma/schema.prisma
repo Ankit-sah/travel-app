@@ -37,15 +37,23 @@ model Package {
 }
 
 model Booking {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  packageId String   @db.ObjectId
-  package   Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
-  name      String
-  email     String
-  phone     String?
-  message   String?
-  createdAt DateTime @default(now())
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  packageId     String    @db.ObjectId
+  package       Package   @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  name          String
+  email         String
+  phone         String?
+  message       String?
+  amount        Float? // Total amount in cents (from package price)
+  paymentStatus String    @default("pending") // pending, paid, failed, refunded
+  stripeSessionId String? // Stripe Checkout Session ID
+  stripePaymentIntentId String? // Stripe Payment Intent ID
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@index([packageId])
+  @@index([email])
+  @@index([paymentStatus])
+  @@index([stripeSessionId])
 }
 

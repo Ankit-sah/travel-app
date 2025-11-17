@@ -178,7 +178,11 @@ export default async function PackagePage({ params }: PackagePageProps) {
                     </div>
                   )}
                 </div>
-                <PackageBookingForm packageId={pkg.id} packageTitle={pkg.title} />
+                <PackageBookingForm
+                  packageId={pkg.id}
+                  packageTitle={pkg.title}
+                  packagePrice={pkg.price}
+                />
               </CardContent>
             </Card>
           </div>
