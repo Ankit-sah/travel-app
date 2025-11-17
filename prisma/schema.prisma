@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Destination {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String    @unique
+  description String?
+  packages    Package[]
+  createdAt   DateTime  @default(now())
+}
+
+model Package {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  slug         String      @unique
+  title        String
+  description  String      @db.String
+  images       String[]
+  price        Float
+  duration     Int // Duration in days
+  destinationId String     @db.ObjectId
+  destination  Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  highlights   String[]
+  bookings     Booking[]
+  createdAt    DateTime    @default(now())
+
+  @@index([destinationId])
+  @@index([slug])
+}
+
+model Booking {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  packageId String   @db.ObjectId
+  package   Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  name      String
+  email     String
+  phone     String?
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([packageId])
+}
+

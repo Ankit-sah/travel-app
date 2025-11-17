@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Convert hex colors to HSL - Primary: #0B6E4F */
+    --primary: 164 70% 26%; /* #0B6E4F */
+    --primary-foreground: 0 0% 100%;
+
+    /* Accent: #F59E0B */
+    --accent: 43 96% 50%; /* #F59E0B */
+    --accent-foreground: 0 0% 100%;
+
+    /* Background: #F7F7F8 */
+    --background: 240 7% 97%; /* #F7F7F8 */
+    --foreground: 222 47% 11%; /* #0F172A */
+
+    /* Secondary/Muted */
+    --secondary: 240 5% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 240 5% 92%;
+    --muted-foreground: 240 4% 46%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 164 70% 26%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
