@@ -5,6 +5,13 @@ import { formatAmountForStripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
+    if (!stripe) {
+      return NextResponse.json(
+        { error: "Stripe is not configured. Please set STRIPE_SECRET_KEY in environment variables." },
+        { status: 500 }
+      );
+    }
+
     const body = await req.json();
     const { packageId, bookingId } = body;
 

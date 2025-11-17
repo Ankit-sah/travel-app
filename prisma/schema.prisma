@@ -20,40 +20,39 @@ model Destination {
 }
 
 model Package {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  slug         String      @unique
-  title        String
-  description  String      @db.String
-  images       String[]
-  price        Float
-  duration     Int // Duration in days
-  destinationId String     @db.ObjectId
-  destination  Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-  highlights   String[]
-  bookings     Booking[]
-  createdAt    DateTime    @default(now())
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  slug          String      @unique
+  title         String
+  description   String      @db.String
+  images        String[]
+  price         Float
+  duration      Int // Duration in days
+  destinationId String      @db.ObjectId
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  highlights    String[]
+  bookings      Booking[]
+  createdAt     DateTime    @default(now())
 
   @@index([destinationId])
 }
 
 model Booking {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  packageId     String    @db.ObjectId
-  package       Package   @relation(fields: [packageId], references: [id], onDelete: Cascade)
-  name          String
-  email         String
-  phone         String?
-  message       String?
-  amount        Float? // Total amount in cents (from package price)
-  paymentStatus String    @default("pending") // pending, paid, failed, refunded
-  stripeSessionId String? // Stripe Checkout Session ID
+  id                    String   @id @default(auto()) @map("_id") @db.ObjectId
+  packageId             String   @db.ObjectId
+  package               Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  name                  String
+  email                 String
+  phone                 String?
+  message               String?
+  amount                Float? // Total amount in cents (from package price)
+  paymentStatus         String   @default("pending") // pending, paid, failed, refunded
+  stripeSessionId       String? // Stripe Checkout Session ID
   stripePaymentIntentId String? // Stripe Payment Intent ID
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@index([packageId])
   @@index([email])
   @@index([paymentStatus])
   @@index([stripeSessionId])
 }
-
