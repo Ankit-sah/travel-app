@@ -34,7 +34,6 @@ model Package {
   createdAt    DateTime    @default(now())
 
   @@index([destinationId])
-  @@index([slug])
 }
 
 model Booking {
