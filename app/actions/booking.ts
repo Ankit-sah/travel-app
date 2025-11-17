@@ -28,12 +28,15 @@ export async function submitBooking(formData: FormData) {
       },
     });
 
+    const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Travel App";
+    const noreplyEmail = process.env.NEXT_PUBLIC_NOREPLY_EMAIL || "noreply@travelapp.com";
+
     // Email stub - in production, replace with actual email service
     console.log("📧 Booking Notification Email:");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     console.log(`To: ${booking.email}`);
     console.log(`Subject: Booking Confirmation - ${booking.package.title}`);
-    console.log(`From: noreply@nbmtravel.com`);
+    console.log(`From: ${noreplyEmail}`);
     console.log("");
     console.log(`Dear ${booking.name},`);
     console.log("");
@@ -47,7 +50,7 @@ export async function submitBooking(formData: FormData) {
     if (booking.message) console.log(`- Message: ${booking.message}`);
     console.log("");
     console.log("Best regards,");
-    console.log("NBM Travel Team");
+    console.log(`${siteName} Team`);
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
     revalidatePath("/packages");

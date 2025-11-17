@@ -1,19 +1,17 @@
 import Link from "next/link";
-import { Plane } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Travel App";
+  const siteEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@travelapp.com";
+
   return (
     <footer className="border-t bg-muted/50">
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <Plane className="h-6 w-6 text-primary" />
-              <span className="font-bold text-lg">
-                {process.env.NEXT_PUBLIC_SITE_NAME || "NBM Travel"}
-              </span>
-            </Link>
+            <Logo size="md" />
             <p className="text-sm text-muted-foreground">
               Your trusted travel partner for unforgettable journeys around the world.
             </p>
@@ -65,7 +63,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:info@nbmtravel.com"
+                  href={`mailto:${siteEmail}`}
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
                   Email Us
@@ -104,7 +102,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {currentYear} {process.env.NEXT_PUBLIC_SITE_NAME || "NBM Travel"}. All rights reserved.</p>
+          <p>© {currentYear} {siteName}. All rights reserved.</p>
         </div>
       </div>
     </footer>

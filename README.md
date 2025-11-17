@@ -206,12 +206,38 @@ Packages can be added via:
 2. **Direct database insertion** using Prisma Client
 3. **Update seed script** (`prisma/seed.ts`) and re-run `npm run prisma:seed`
 
-### Changing Site Name
+### Changing Branding (Site Name & Logo)
 
-Update `NEXT_PUBLIC_SITE_NAME` in `.env` or modify the default in:
-- `app/layout.tsx` (metadata)
-- `components/Header.tsx`
-- `components/Footer.tsx`
+#### Site Name
+Update `NEXT_PUBLIC_SITE_NAME` in your `.env` file:
+```env
+NEXT_PUBLIC_SITE_NAME="Your Travel Company Name"
+```
+
+#### Logo Options
+The app includes a flexible `Logo` component with multiple options:
+
+1. **Icon Variants** (default):
+   - `default` - Plane icon (✈️)
+   - `compass` - Compass icon (🧭)
+   - `mappin` - Map pin icon (📍)
+   - Set via: `NEXT_PUBLIC_LOGO_VARIANT="compass"` in `.env`
+
+2. **Custom Image Logo**:
+   - Add your logo image to `public/logo.png` (or any format)
+   - Set in `.env`:
+     ```env
+     NEXT_PUBLIC_LOGO_VARIANT="image"
+     NEXT_PUBLIC_LOGO_PATH="/logo.png"
+     ```
+
+3. **Contact Information**:
+   ```env
+   NEXT_PUBLIC_CONTACT_EMAIL="info@yourdomain.com"
+   NEXT_PUBLIC_NOREPLY_EMAIL="noreply@yourdomain.com"
+   ```
+
+The logo automatically appears in the Header and Footer. All branding uses environment variables for easy customization.
 
 ## 📧 Email Integration (TODO)
 

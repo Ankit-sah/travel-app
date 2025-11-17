@@ -28,8 +28,11 @@ export default function ContactPage() {
               <CardDescription>Send us an email anytime</CardDescription>
             </CardHeader>
             <CardContent>
-              <a href="mailto:info@nbmtravel.com" className="text-primary hover:underline">
-                info@nbmtravel.com
+              <a
+                href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@travelapp.com"}`}
+                className="text-primary hover:underline"
+              >
+                {process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@travelapp.com"}
               </a>
             </CardContent>
           </Card>

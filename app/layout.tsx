@@ -6,10 +6,12 @@ import { Footer } from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Travel App";
+
 export const metadata: Metadata = {
   title: {
-    default: process.env.NEXT_PUBLIC_SITE_NAME || "NBM Travel",
-    template: `%s | ${process.env.NEXT_PUBLIC_SITE_NAME || "NBM Travel"}`,
+    default: siteName,
+    template: `%s | ${siteName}`,
   },
   description: "Discover unforgettable travel experiences with curated packages and destinations around the world.",
 };

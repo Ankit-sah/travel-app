@@ -20,9 +20,9 @@ export default function AboutPage() {
 
         <div className="prose prose-lg max-w-none mb-12">
           <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-            At {process.env.NEXT_PUBLIC_SITE_NAME || "NBM Travel"}, we believe that travel has the power to
-            transform lives, create lasting memories, and broaden horizons. With years of experience in
-            the travel industry, we are passionate about curating exceptional journeys that exceed our
+            At {process.env.NEXT_PUBLIC_SITE_NAME || "Travel App"}, we believe that travel has the power
+            to transform lives, create lasting memories, and broaden horizons. With years of experience
+            in the travel industry, we are passionate about curating exceptional journeys that exceed our
             clients' expectations.
           </p>
           <p className="text-muted-foreground text-lg leading-relaxed mb-6">
