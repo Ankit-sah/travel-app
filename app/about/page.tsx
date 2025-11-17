@@ -23,7 +23,7 @@ export default function AboutPage() {
             At {process.env.NEXT_PUBLIC_SITE_NAME || "Travel App"}, we believe that travel has the power
             to transform lives, create lasting memories, and broaden horizons. With years of experience
             in the travel industry, we are passionate about curating exceptional journeys that exceed our
-            clients' expectations.
+            clients&apos; expectations.
           </p>
           <p className="text-muted-foreground text-lg leading-relaxed mb-6">
             Our team of travel experts carefully selects each destination, package, and experience to
@@ -31,8 +31,8 @@ export default function AboutPage() {
             to offer you unique insights into local cultures, cuisines, and traditions.
           </p>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Whether you're seeking adventure, relaxation, cultural immersion, or a romantic getaway,
-            we're here to help you plan the perfect trip tailored to your preferences and budget.
+            Whether you&apos;re seeking adventure, relaxation, cultural immersion, or a romantic getaway,
+            we&apos;re here to help you plan the perfect trip tailored to your preferences and budget.
           </p>
         </div>
 
