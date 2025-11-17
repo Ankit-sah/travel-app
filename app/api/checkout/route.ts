@@ -7,7 +7,22 @@ export async function POST(req: NextRequest) {
   try {
     if (!stripe) {
       return NextResponse.json(
-        { error: "Stripe is not configured. Please set STRIPE_SECRET_KEY in environment variables." },
+        { 
+          error: "Stripe is not configured. Please set STRIPE_SECRET_KEY in environment variables.",
+          hint: "Get your API key from https://dashboard.stripe.com/apikeys"
+        },
+        { status: 500 }
+      );
+    }
+
+    // Validate Stripe key format
+    const stripeKey = process.env.STRIPE_SECRET_KEY || "";
+    if (!stripeKey.startsWith("sk_test_") && !stripeKey.startsWith("sk_live_")) {
+      return NextResponse.json(
+        { 
+          error: "Invalid Stripe API key format. Stripe keys should start with 'sk_test_' (for test mode) or 'sk_live_' (for live mode).",
+          hint: "Make sure you copied the complete secret key from https://dashboard.stripe.com/apikeys"
+        },
         { status: 500 }
       );
     }
@@ -80,10 +95,26 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Stripe checkout error:", error);
+    
+    // Provide helpful error messages for common issues
+    if (error?.type === "StripeAuthenticationError") {
+      return NextResponse.json(
+        { 
+          error: "Invalid Stripe API key. Please check your STRIPE_SECRET_KEY in .env",
+          hint: "Make sure you're using a valid test key starting with 'sk_test_' from https://dashboard.stripe.com/apikeys",
+          details: error.message
+        },
+        { status: 401 }
+      );
+    }
+    
     return NextResponse.json(
-      { error: "Failed to create checkout session" },
+      { 
+        error: "Failed to create checkout session",
+        details: error?.message || "Unknown error occurred"
+      },
       { status: 500 }
     );
   }
