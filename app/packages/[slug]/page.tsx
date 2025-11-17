@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PackageBookingForm } from "@/components/PackageBookingForm";
-import { MapPin, Calendar, DollarSign, CheckCircle2, XCircle } from "lucide-react";
+import { MapPin, Calendar, DollarSign, CheckCircle2 } from "lucide-react";
 
 export const revalidate = 60;
 
