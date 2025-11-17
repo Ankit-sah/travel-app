@@ -20,7 +20,6 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ### 3. Verify Your Key
 
 Your Stripe secret key should:
-
 - ✅ Start with `sk_test_` (test mode) or `sk_live_` (production)
 - ✅ Be around 100+ characters long
 - ✅ Not have any spaces or line breaks
@@ -31,11 +30,12 @@ Your Stripe secret key should:
 #### ❌ "Invalid API Key provided"
 
 **Possible causes:**
-
 1. Key is incomplete or truncated
    - Solution: Copy the full key from Stripe Dashboard
+   
 2. Key has extra spaces or characters
    - Solution: Remove any quotes, spaces, or line breaks around the key
+   
 3. Using wrong key type
    - Solution: Use the **Secret key** (not Publishable key)
    - Secret keys start with `sk_test_` or `sk_live_`
@@ -50,10 +50,10 @@ Your Stripe secret key should:
 
 ```env
 # ✅ Correct - No quotes needed, but they're fine too
-STRIPE_SECRET_KEY=sk_test_51AbCdEfGhIjKlMnOpQrStUvWxYz1234567890abcdefghijklmnopqrstuvwxyz
+STRIPE_SECRET_KEY=sk_test_51EXAMPLEKEY1234567890abcdefghijklmnopqrstuvwxyz
 
 # ✅ Also correct - With quotes
-STRIPE_SECRET_KEY="sk_test_51AbCdEfGhIjKlMnOpQrStUvWxYz1234567890abcdefghijklmnopqrstuvwxyz"
+STRIPE_SECRET_KEY="sk_test_51EXAMPLEKEY1234567890abcdefghijklmnopqrstuvwxyz"
 
 # ❌ Wrong - Incomplete key
 STRIPE_SECRET_KEY="sk_test_51..."
@@ -68,21 +68,19 @@ STRIPE_SECRET_KEY=" sk_test_51... "
 ### Testing Your Setup
 
 1. **Check if key is loaded:**
-
    ```bash
    # In your terminal, verify the key is set
    echo $STRIPE_SECRET_KEY  # Should show your key (if using system env)
    ```
 
 2. **Test with Stripe CLI:**
-
    ```bash
    # Install Stripe CLI
    brew install stripe/stripe-cli/stripe
-
+   
    # Login
    stripe login
-
+   
    # Test your key
    stripe balance retrieve
    ```
@@ -137,7 +135,6 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 ### Testing Payments
 
 Use Stripe test cards:
-
 - **Success**: `4242 4242 4242 4242`
 - **Decline**: `4000 0000 0000 0002`
 - **3D Secure**: `4000 0025 0000 3155`
@@ -152,7 +149,6 @@ Use Stripe test cards:
    - No extra spaces or characters
 
 2. **Restart your dev server:**
-
    ```bash
    # Stop the server (Ctrl+C)
    # Then restart
@@ -173,3 +169,4 @@ Use Stripe test cards:
    - If key is definitely correct but still not working
    - Check Stripe status: https://status.stripe.com
    - Contact Stripe support through dashboard
+
