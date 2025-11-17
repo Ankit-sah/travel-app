@@ -8,6 +8,11 @@ import { stripe } from "@/lib/stripe";
 
 async function getBookingDetails(sessionId: string) {
   try {
+    if (!stripe) {
+      console.error("Stripe is not configured");
+      return null;
+    }
+
     // Retrieve session from Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ["line_items", "payment_intent"],
